@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:recipeapp/controller/login_api.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -6,6 +8,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController _email = TextEditingController();
+  TextEditingController _password = TextEditingController();
+
+  String email, password;
+
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,6 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.only(left: 30, right: 30, bottom: 30),
                 child: Column(
                   children: <Widget>[
+                    Visibility(
+                        visible: loading, child: LinearProgressIndicator()),
                     Container(
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
@@ -95,30 +106,43 @@ class _LoginPageState extends State<LoginPage> {
                                     bottom:
                                         BorderSide(color: Colors.grey[100]))),
                             child: TextField(
+                              controller: _email,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Email',
                                 hintStyle: TextStyle(color: Colors.grey[400]),
                               ),
+                              onChanged: (text) {
+                                email = text;
+                              },
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.all(8),
                             child: TextField(
+                              controller: _password,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Password',
                                 hintStyle: TextStyle(color: Colors.grey[400]),
                               ),
+                              onChanged: (text) {
+                                password = text;
+                              },
                             ),
                           ),
                           SizedBox(
                             height: 30,
                           ),
                           InkWell(
-                            onTap: () {
-                              //todo
-                              print('done');
+                            onTap: () async {
+                              LoginApi(email, password)
+                                  .fetchData()
+                                  .whenComplete(() {});
+
+                              setState(() {
+                                loading = true;
+                              });
                             },
                             child: Container(
                               height: 50,
