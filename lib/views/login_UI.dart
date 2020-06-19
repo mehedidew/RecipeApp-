@@ -15,6 +15,11 @@ class _LoginPageState extends State<LoginPage> {
 
   bool loading = false;
 
+  _goToDashBoard() async {
+    if (LoginApi.status == true) {}
+    Navigator.pushNamed(context, '/dashboard');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +143,9 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () async {
                               LoginApi(email, password)
                                   .fetchData()
-                                  .whenComplete(() {});
+                                  .whenComplete(() {
+                                _goToDashBoard();
+                              });
 
                               setState(() {
                                 loading = true;
