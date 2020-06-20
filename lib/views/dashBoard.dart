@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:recipeapp/controller/all_recipes_api.dart';
 import 'package:recipeapp/customWidget/drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashBoard extends StatefulWidget {
   @override
@@ -12,9 +14,11 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  String token;
 
   @override
   void initState() {
+    getToken();
     super.initState();
   }
 
@@ -99,227 +103,124 @@ class _DashBoardState extends State<DashBoard> {
                         top: 10,
                       ),
                       height: 125,
-                      child: ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: Container(
-                              height: 125,
-                              width: 250,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(32),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                'https://lh3.googleusercontent.com/Qddo-2XM8xRqd_qs16TNZ-Mx7Nci-SUMxz82n4uZwLuw5xHHwD59pfnMXIxH2Z1lrvrcPyicbrFTxqMfwi2X5g=s180')),
-                                      ),
-                                      height: 125,
-                                      width: 100,
-                                    ),
+                      child: FutureBuilder(
+                        future: AllRecipesApi(token).fetchData(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            if (snapshot.data == null) {
+                              return Container(
+                                child: Center(
+                                  child: Container(
+                                    height: 125,
+                                    width: 250,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
                                   ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 100,
-                                        child: Text(
-                                          'Garlic Crusted Prime Rib Roast',
-                                          overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            } else {
+                              return ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 20.0),
+                                      child: Container(
+                                        height: 125,
+                                        width: 250,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(12)),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(32),
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          snapshot.data[index]
+                                                              ['recipeImage'])),
+                                                ),
+                                                height: 125,
+                                                width: 100,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Container(
+                                                  width: 100,
+                                                  child: Text(
+                                                    snapshot.data[index]
+                                                        ['title'],
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
 //                                    textAlign: TextAlign.justify,
-                                          maxLines: 3,
-                                          style: TextStyle(
-                                              fontFamily: 'Quicksand'),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        height: 1,
-                                        width: 75,
-                                        color: Colors.orange,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: 100,
-                                        child: Center(
-                                          child: Text(
-                                            'Life Tastes Good',
+                                                    maxLines: 3,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            'Quicksand'),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  height: 1,
+                                                  width: 75,
+                                                  color: Colors.orange,
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  width: 100,
+                                                  child: Center(
+                                                    child: Text(
+                                                      snapshot.data[index]
+                                                          ['sourceName'],
 
-                                            overflow: TextOverflow.ellipsis,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
 //                                    textAlign: TextAlign.justify,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                fontFamily: 'Quicksand'),
-                                          ),
+                                                      maxLines: 2,
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          fontFamily:
+                                                              'Quicksand'),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: Container(
-                              height: 125,
-                              width: 250,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(32),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                'https://lh3.googleusercontent.com/Qddo-2XM8xRqd_qs16TNZ-Mx7Nci-SUMxz82n4uZwLuw5xHHwD59pfnMXIxH2Z1lrvrcPyicbrFTxqMfwi2X5g=s180')),
-                                      ),
-                                      height: 125,
-                                      width: 100,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 100,
-                                        child: Text(
-                                          'Garlic Crusted Prime Rib Roast',
-                                          overflow: TextOverflow.ellipsis,
-//                                    textAlign: TextAlign.justify,
-                                          maxLines: 3,
-                                          style: TextStyle(
-                                              fontFamily: 'Quicksand'),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        height: 1,
-                                        width: 75,
-                                        color: Colors.orange,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: 100,
-                                        child: Center(
-                                          child: Text(
-                                            'Life Tastes Good',
-
-                                            overflow: TextOverflow.ellipsis,
-//                                    textAlign: TextAlign.justify,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                fontFamily: 'Quicksand'),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: Container(
-                              height: 125,
-                              width: 250,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(32),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                'https://lh3.googleusercontent.com/Qddo-2XM8xRqd_qs16TNZ-Mx7Nci-SUMxz82n4uZwLuw5xHHwD59pfnMXIxH2Z1lrvrcPyicbrFTxqMfwi2X5g=s180')),
-                                      ),
-                                      height: 125,
-                                      width: 100,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 100,
-                                        child: Text(
-                                          'Garlic Crusted Prime Rib Roast',
-                                          overflow: TextOverflow.ellipsis,
-//                                    textAlign: TextAlign.justify,
-                                          maxLines: 3,
-                                          style: TextStyle(
-                                              fontFamily: 'Quicksand'),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        height: 1,
-                                        width: 75,
-                                        color: Colors.orange,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: 100,
-                                        child: Center(
-                                          child: Text(
-                                            'Life Tastes Good',
-
-                                            overflow: TextOverflow.ellipsis,
-//                                    textAlign: TextAlign.justify,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                fontFamily: 'Quicksand'),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                                    );
+                                  });
+                            }
+                          } else {
+                            return Container(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -434,5 +335,15 @@ class _DashBoardState extends State<DashBoard> {
                     child: Text('No')),
               ],
             ));
+  }
+
+  void getToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    setState(() {
+//      token = pref.get('TOKEN');
+      token =
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3JjYXBwLnV0ZWNoLmRldi9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTU5MjY3MjA0MCwiZXhwIjoxNTkyNjc1NjQwLCJuYmYiOjE1OTI2NzIwNDAsImp0aSI6Ill1anNRU1F5NE42bVdCdU4iLCJzdWIiOjEsInBydiI6Ijg3ZTBhZjFlZjlmZDE1ODEyZmRlYzk3MTUzYTE0ZTBiMDQ3NTQ2YWEifQ.j2agS7GZD9wBfqx6tWT7j4OAcVzsSg9lFjvFWBUUvd8';
+    });
   }
 }

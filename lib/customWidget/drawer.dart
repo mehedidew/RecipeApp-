@@ -21,7 +21,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
   @override
   void initState() {
-    getUserDetails();
+    getToken();
     super.initState();
   }
 
@@ -101,7 +101,7 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
-  void getUserDetails() async {
+  void getToken() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     token = pref.get('TOKEN');
     UserDetails(token).fetchData().whenComplete(() => setData());
