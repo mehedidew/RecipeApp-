@@ -12,12 +12,13 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _password = TextEditingController();
 
   String email, password;
-
+  String token;
   bool loading = false;
 
   _goToDashBoard() async {
-    if (LoginApi.status == true) {}
-    Navigator.pushNamed(context, '/dashboard');
+    if (LoginApi.status == true) {
+      Navigator.pushNamed(context, '/dashboard');
+    }
   }
 
   @override
@@ -89,7 +90,11 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: <Widget>[
                     Visibility(
-                        visible: loading, child: LinearProgressIndicator()),
+                        visible: loading,
+                        child: LinearProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                        )),
                     Container(
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(

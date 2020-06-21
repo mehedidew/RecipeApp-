@@ -4,13 +4,13 @@ import 'package:http/http.dart' as http;
 
 import 'links.dart';
 
-class AllRecipesApi {
+class TodaysRecipesApi {
   String token;
   bool status = false;
   String response;
   List allRecipe = [];
 
-  AllRecipesApi(this.token);
+  TodaysRecipesApi(this.token);
 
   Future fetchData() async {
     try {

@@ -11,16 +11,7 @@ class TokenManager {
 
   TokenManager.fromJson(Map json) {
     if (json.containsKey('token')) {
-      setToken(json['token']);
+      saveToken(json['token']);
     }
-  }
-
-  String get token => _token; // To ensure readonly
-
-  Future<Null> setToken(String token) async {
-    // set your _token here
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString('TOKEN', token);
-    _token = token;
   }
 }

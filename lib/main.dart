@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
           primaryColor: Colors.deepPurpleAccent,
           accentColor: Colors.purpleAccent),
-      initialRoute: '/dashboard',
+      initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
         '/dashboard': (context) => DashBoard(),
