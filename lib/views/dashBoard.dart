@@ -139,8 +139,10 @@ class _DashBoardState extends State<DashBoard> {
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return InkWell(
-                                        onTap: () =>
-                                            print(snapshot.data[index]['id']),
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/showRecipe',
+                                                arguments: (snapshot.data[index]
+                                                    ['id'])),
                                         child: Padding(
                                           padding:
                                               const EdgeInsets.only(left: 20.0),
@@ -353,6 +355,13 @@ class _DashBoardState extends State<DashBoard> {
                                               fontFamily: 'Timesroman',
                                               fontSize: 30,
                                               fontWeight: FontWeight.bold,
+                                              shadows: [
+                                                Shadow(
+                                                  blurRadius: 4.0,
+                                                  color: Colors.black54,
+                                                  offset: Offset(2.0, 2.0),
+                                                ),
+                                              ],
                                               color: Colors.white),
                                         ),
                                         SizedBox(

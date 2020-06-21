@@ -16,8 +16,12 @@ class _LoginPageState extends State<LoginPage> {
   bool loading = false;
 
   _goToDashBoard() async {
-    if (LoginApi.status == true) {
+    if (LoginApi.response == 'success') {
       Navigator.pushNamed(context, '/dashboard');
+    } else {
+      setState(() {
+        loading = false;
+      });
     }
   }
 

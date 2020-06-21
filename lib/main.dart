@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:recipeapp/views/dashBoard.dart';
 import 'package:recipeapp/views/login_UI.dart';
+import 'package:recipeapp/views/showRecipe.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
+        '/showRecipe': (context) => ShowRecipe(),
         '/dashboard': (context) => DashBoard(),
       },
     );

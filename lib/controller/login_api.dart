@@ -8,8 +8,7 @@ class LoginApi {
   final String email;
   final String password;
   LoginApi(this.email, this.password);
-  static bool status = false;
-  String response;
+  static String response;
 
   Future fetchData() async {
     try {
@@ -19,11 +18,10 @@ class LoginApi {
       final jsonData = json.decode(data.body);
 
       if (data.statusCode == 200) {
-        status = true;
         response = jsonData['response'];
         TokenManager.fromJson(jsonData['result']);
 
-        return jsonData['result']['token'];
+        return response;
       } else {
         throw Exception('Error');
       }
