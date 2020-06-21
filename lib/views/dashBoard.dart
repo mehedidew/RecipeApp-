@@ -313,69 +313,75 @@ class _DashBoardState extends State<DashBoard> {
                         return ListView.builder(
                             itemCount: snapshot.data.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return Stack(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 12, right: 12, top: 15),
-                                    child: Container(
-                                      height: 275,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(
-                                            image: NetworkImage(snapshot
-                                                .data[index]['recipeImage']),
-                                            fit: BoxFit.cover),
-                                      ),
-                                      child: ClipRect(
-                                        child: BackdropFilter(
-                                          filter: ImageFilter.blur(
-                                              sigmaX: 1.5, sigmaY: 1.5),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  Colors.white.withOpacity(0.1),
+                              return InkWell(
+                                onTap: () => Navigator.of(context).pushNamed(
+                                    '/showRecipe',
+                                    arguments: (snapshot.data[index]['id'])),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 12, right: 12, top: 15),
+                                      child: Container(
+                                        height: 275,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          image: DecorationImage(
+                                              image: NetworkImage(snapshot
+                                                  .data[index]['recipeImage']),
+                                              fit: BoxFit.cover),
+                                        ),
+                                        child: ClipRect(
+                                          child: BackdropFilter(
+                                            filter: ImageFilter.blur(
+                                                sigmaX: 1.5, sigmaY: 1.5),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white
+                                                    .withOpacity(0.1),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                        top: 150, left: 60, right: 30),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          snapshot.data[index]['title'],
-                                          overflow: TextOverflow.ellipsis,
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: 150, left: 60, right: 30),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            snapshot.data[index]['title'],
+                                            overflow: TextOverflow.ellipsis,
 //                                    textAlign: TextAlign.justify,
-                                          maxLines: 3,
-                                          style: TextStyle(
-                                              fontFamily: 'Timesroman',
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.bold,
-                                              shadows: [
-                                                Shadow(
-                                                  blurRadius: 4.0,
-                                                  color: Colors.black54,
-                                                  offset: Offset(2.0, 2.0),
-                                                ),
-                                              ],
-                                              color: Colors.white),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                          height: 3,
-                                          width: 75,
-                                          color: Colors.orange,
-                                        ),
-                                      ],
+                                            maxLines: 3,
+                                            style: TextStyle(
+                                                fontFamily: 'Timesroman',
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold,
+                                                shadows: [
+                                                  Shadow(
+                                                    blurRadius: 4.0,
+                                                    color: Colors.black54,
+                                                    offset: Offset(2.0, 2.0),
+                                                  ),
+                                                ],
+                                                color: Colors.white),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Container(
+                                            height: 3,
+                                            width: 75,
+                                            color: Colors.orange,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               );
                             });
                       }
