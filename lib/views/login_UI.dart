@@ -15,9 +15,12 @@ class _LoginPageState extends State<LoginPage> {
   String token;
   bool loading = false;
 
-  _goToDashBoard() async {
+  _goToDashBoard(val) async {
     if (LoginApi.response == 'success') {
-      Navigator.pushNamed(context, '/dashboard');
+      setState(() {
+        loading = false;
+      });
+      Navigator.pushNamed(context, '/dashboard', arguments: (val));
     } else {
       setState(() {
         loading = false;
@@ -152,8 +155,8 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () async {
                               LoginApi(email, password)
                                   .fetchData()
-                                  .whenComplete(() {
-                                _goToDashBoard();
+                                  .then((value) {
+                                _goToDashBoard(value);
                               });
 
                               setState(() {

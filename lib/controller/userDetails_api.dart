@@ -11,7 +11,6 @@ class UserDetails {
 
   Future fetchData() async {
     try {
-      print('here');
       final data = await http.get(Links.userDetailsApi, headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token"

@@ -14,4 +14,8 @@ class TokenManager {
       saveToken(json['token']);
     }
   }
+
+  Future getToken() async {
+    return _token;
+  }
 }

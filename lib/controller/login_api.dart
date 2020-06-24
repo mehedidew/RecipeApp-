@@ -21,7 +21,7 @@ class LoginApi {
         response = jsonData['response'];
         TokenManager.fromJson(jsonData['result']);
 
-        return response;
+        return jsonData['result']['token'];
       } else {
         throw Exception('Error');
       }

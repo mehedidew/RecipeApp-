@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:recipeapp/controller/all_recipes_api.dart';
 import 'package:recipeapp/controller/todays_recipe_api.dart';
 import 'package:recipeapp/customWidget/drawer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DashBoard extends StatefulWidget {
   @override
@@ -18,14 +17,9 @@ class _DashBoardState extends State<DashBoard> {
   String token;
 
   @override
-  void initState() {
-    getToken();
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    token = ModalRoute.of(context).settings.arguments;
+
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -420,14 +414,5 @@ class _DashBoardState extends State<DashBoard> {
                     child: Text('No')),
               ],
             ));
-  }
-
-  getToken() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
-    setState(() {
-      token = pref.getString('TOKEN');
-    });
-    print(token);
   }
 }
