@@ -270,7 +270,8 @@ class _ShowRecipeState extends State<ShowRecipe> {
                                     padding: const EdgeInsets.only(left: 10.0),
                                     child: SizedBox(
                                       height: 500,
-                                      width: 350,
+                                      width: MediaQuery.of(context).size.width -
+                                          50,
                                       child: Column(
                                         children: <Widget>[
                                           Expanded(

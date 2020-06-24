@@ -20,6 +20,7 @@ class _DashBoardState extends State<DashBoard> {
   @override
   void initState() {
     getToken();
+
     super.initState();
   }
 
@@ -421,7 +422,7 @@ class _DashBoardState extends State<DashBoard> {
             ));
   }
 
-  void getToken() async {
+  getToken() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     setState(() {
